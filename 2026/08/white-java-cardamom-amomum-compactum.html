@@ -445,7 +445,12 @@ section{padding:60px 5%}
 .cat-wrap{padding:0 12px 48px}
 }
 
---></style>
+-->
+/* tabel menggulir di dalam kotaknya sendiri, jangan mendorong halaman */
+.arn-table-scroll{width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:24px 0}
+.arn-table-scroll table{margin:0;min-width:520px}
+html,body{max-width:100%;overflow-x:hidden}
+</style>
 <noscript></noscript>
 <script type="application/ld+json">
 {
@@ -523,7 +528,7 @@ section{padding:60px 5%}
 
 <h3>How It Differs From Green Cardamom</h3>
 
-<table>
+<div class='arn-table-scroll'><table>
   <thead>
     <tr><th>Characteristic</th><th>White Java Cardamom</th><th>Green Cardamom</th></tr>
   </thead>
@@ -534,7 +539,7 @@ section{padding:60px 5%}
     <tr><td>Aroma</td><td>Milder, slightly camphor-like</td><td>Sharp, intensely floral</td></tr>
     <tr><td>Main origin</td><td>Indonesia (Java)</td><td>India, Guatemala</td></tr>
   </tbody>
-</table>
+</table></div>
 
 <p>This distinction matters commercially. If your specification says "cardamom" without naming the species, you risk receiving the wrong product entirely. Always specify <em>Amomum compactum</em> in your purchase order.</p>
 
@@ -559,7 +564,7 @@ section{padding:60px 5%}
 
 <p>These are the parameters that typically appear in a White Java Cardamom contract. Exact figures should always be confirmed against the specific lot on offer:</p>
 
-<table>
+<div class='arn-table-scroll'><table>
   <thead>
     <tr><th>Parameter</th><th>Typical Export Standard</th></tr>
   </thead>
@@ -571,7 +576,7 @@ section{padding:60px 5%}
     <tr><td>Mould</td><td>Nil visible</td></tr>
     <tr><td>Live insects</td><td>Nil</td></tr>
   </tbody>
-</table>
+</table></div>
 
 <p>For food-grade and pharmaceutical applications, buyers commonly add microbiological limits and aflatoxin testing to the specification. Agree on the testing laboratory and who bears the cost before shipment, not after.</p>
 
