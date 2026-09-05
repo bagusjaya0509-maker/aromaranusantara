@@ -520,7 +520,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </nav>
 <!-- HERO -->
 <div class='arn-hero' id='home'>
-<div class='arn-hero-bg' style='background-image:url("https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=1600&auto=format&fit=crop");'></div>
+<div class='arn-hero-bg' style='background-image:url("/assets/img/hero.webp");'></div>
 <div class='arn-hero-overlay'></div>
 <div class='arn-hero-content'>
 <div class='arn-hero-badge'>Indonesian Spice Exporter &#8212; Est. Bali</div>
@@ -1152,6 +1152,23 @@ html,body{max-width:100%;overflow-x:hidden}
   window.addEventListener('resize', function(){
     if(window.innerWidth > 768){ closeMenu(); }
   });
+
+  /* jaring pengaman: kalau IntersectionObserver tidak pernah menyala
+     (tab tersembunyi, perayap mesin pencari, browser aneh),
+     buka paksa semua elemen supaya konten tidak pernah tersangkut tak terlihat */
+  setTimeout(function(){
+    var sisa = document.querySelectorAll('.arn-animate');
+    for (var i = 0; i < sisa.length; i++) {
+      sisa[i].classList.add('is-visible');
+      /* paksa terlihat tanpa bergantung pada animasi CSS - animasi tidak
+         berjalan di tab tersembunyi maupun pada perayap mesin pencari */
+      if (parseFloat(getComputedStyle(sisa[i]).opacity) < 0.05) {
+        sisa[i].style.opacity = '1';
+        sisa[i].style.transform = 'none';
+        sisa[i].style.animation = 'none';
+      }
+    }
+  }, 2000);
 })();
 //]]>
 </script>
