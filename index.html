@@ -522,7 +522,7 @@ html,body{max-width:100%;overflow-x:hidden}
 <li><a href='#sourcing'>Sourcing</a></li>
 <li><a href='#services'>Services</a></li>
 <li><a href='#catalog'>Catalog</a></li>
-<li><a href='#insights'>Guides</a></li>
+<li><a href='/articles.html'>Articles</a></li>
 <li><a class='arn-cta-btn' href='#contact'>Get Quotation</a></li>
 </ul>
 <button aria-label='Menu' class='arn-hamburger' id='arnHamburger'>
@@ -1228,6 +1228,18 @@ html,body{max-width:100%;overflow-x:hidden}
     ['.arn-founder-card',        'arn-animate anim-fade-up anim-d3'],
     ['.arn-citem',               'arn-animate anim-fade-up anim-d2'],
     ['.arn-inquiry-bar',         'arn-animate anim-fade-up anim-d2'],
+    /* kartu panduan - dipakai juga di /articles.html */
+    ['.arn-ins-card',            'arn-animate anim-fade-up anim-d2'],
+    /* section katalog: sebelumnya satu-satunya blok tanpa animasi sama sekali.
+       Sengaja hanya elemen tingkat blok - 12 baris .cat-spec kalau ikut
+       dianimasikan jadi ramai dan malah mengganggu saat dibaca. */
+    ['.cat-hero-meta-item',      'arn-animate anim-scale anim-d2'],
+    ['.cat-section-label',       'arn-animate anim-fade-up anim-d2'],
+    ['.cat-product',             'arn-animate anim-fade-up anim-d3'],
+    ['.cat-specs-section',       'arn-animate anim-fade-up anim-d3'],
+    ['.cat-cert',                'arn-animate anim-scale anim-d2'],
+    ['.cat-order-step',          'arn-animate anim-fade-left anim-d2'],
+    ['.cat-contact-box',         'arn-animate anim-fade-up anim-d3'],
   ];
   var delays = ['anim-delay-1','anim-delay-2','anim-delay-3','anim-delay-4','anim-delay-5','anim-delay-6'];
 
