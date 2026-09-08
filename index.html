@@ -494,6 +494,11 @@ section{padding:60px 5%}
   .cat-specs-scroll{margin-inline:0}
 }
 html,body{max-width:100%;overflow-x:hidden}
+.arn-form-status{display:none;margin-top:14px;padding:13px 15px;border-radius:8px;font-size:13px;line-height:1.65}
+.arn-form-status.tampil{display:block}
+.arn-form-status.sukses{background:rgba(201,148,58,0.14);border:1px solid rgba(201,148,58,0.45);color:#F0E4CC}
+.arn-form-status.galat{background:rgba(180,60,50,0.16);border:1px solid rgba(180,60,50,0.5);color:#F3D6D2}
+.arn-form-status a{color:var(--gold-light);font-weight:600}
 </style>
 <script>/*<![CDATA[*/
 /* Gerbang animasi. Kelas arn-js hanya dipasang bila peramban benar-benar sanggup
@@ -919,58 +924,6 @@ html,body{max-width:100%;overflow-x:hidden}
 <!-- FOOTER -->
 </div>
 </section>
-<!-- INSIGHTS -->
-<section class='arn-insights' id='insights'>
-<div class='section-header'>
-<div class='section-eyebrow'>Buyer Resources</div>
-<h2 class='section-title'>Guides for Spice Importers</h2>
-<p class='section-subtitle'>Practical, specification-level guidance on sourcing Indonesian spices &#8212; written for procurement teams and first-time importers.</p>
-</div>
-<div class='arn-ins-grid'>
-<a class='arn-ins-card' href='/2026/09/nutmeg-aflatoxin-rejected-shipments.html'>
-<div class='arn-ins-tag'>Compliance</div>
-<h3>Nutmeg, Aflatoxin, and Why Shipments Get Rejected</h3>
-<p>Why nutmeg fails testing more often than other spices, why the sampling method decides the result, and what to request before a container leaves.</p>
-<span class='arn-ins-more'>Read guide &#8594;</span>
-</a>
-<a class='arn-ins-card' href='/2026/09/spice-sample-vs-container.html'>
-<div class='arn-ins-tag'>Quality</div>
-<h3>Why Your Spice Sample Doesn&#8217;t Match the Container</h3>
-<p>What 200 grams can and cannot promise about 18 tonnes, how to make a sample contractually binding, and what to inspect before shipment.</p>
-<span class='arn-ins-more'>Read guide &#8594;</span>
-</a>
-<a class='arn-ins-card' href='/2026/09/paying-your-first-indonesian-spice-order.html'>
-<div class='arn-ins-tag'>Trade Terms</div>
-<h3>L/C or T/T? Paying Your First Indonesian Spice Order</h3>
-<p>How payment actually works in the Indonesian spice trade: the 30/70 split, what a letter of credit really protects, and the red flags to check before you wire anything.</p>
-<span class='arn-ins-more'>Read guide &#8594;</span>
-</a>
-<a class='arn-ins-card' href='/2026/08/white-java-cardamom-amomum-compactum.html'>
-<div class='arn-ins-tag'>Cardamom</div>
-<h3>White Java Cardamom (Amomum compactum): A Complete Buyer's Guide</h3>
-<p>Specifications, grading, moisture standards, packaging and export documentation for Indonesia's distinctive round cardamom.</p>
-<span class='arn-ins-more'>Read guide &#8594;</span>
-</a>
-<a class='arn-ins-card' href='/2026/08/indonesian-clove-grades-explained-what.html'>
-<div class='arn-ins-tag'>Clove</div>
-<h3>Indonesian Clove Grades Explained: What Every Buyer Should Know</h3>
-<p>Eugenol content, moisture limits, headless tolerance and origin regions &#8212; what separates premium lots from average material.</p>
-<span class='arn-ins-more'>Read guide &#8594;</span>
-</a>
-<a class='arn-ins-card' href='/2026/08/indonesian-nutmeg-grades-origins-and.html'>
-<div class='arn-ins-tag'>Nutmeg</div>
-<h3>Indonesian Nutmeg: Grades, Origins and Export Specifications</h3>
-<p>ABCD and BWP grades, mace, volatile oil, and the aflatoxin controls that matter for EU and regulated markets.</p>
-<span class='arn-ins-more'>Read guide &#8594;</span>
-</a>
-<a class='arn-ins-card' href='/2026/08/how-to-import-spices-from-indonesia.html'>
-<div class='arn-ins-tag'>Import Process</div>
-<h3>How to Import Spices From Indonesia: Documents, Shipping and Costs</h3>
-<p>Incoterms, Certificate of Origin, Phytosanitary, container planning and payment terms &#8212; the full sequence, step by step.</p>
-<span class='arn-ins-more'>Read guide &#8594;</span>
-</a>
-</div>
-</section>
 <!-- FOUNDERS -->
 <section class='arn-founders'>
 <div class='section-header'>
@@ -1072,7 +1025,7 @@ html,body{max-width:100%;overflow-x:hidden}
         We welcome inquiries from importers, wholesalers, distributors, manufacturers, and industrial buyers worldwide. Response within 24 hours.
       </div>
 </div>
-<form action='https://formspree.io/f/GANTI_DENGAN_ID_FORMSPREE' class='arn-form' method='POST'>
+<form action='mailto:business@aromaranusantara.com' class='arn-form' enctype='text/plain' id='arnInquiry' method='POST'>
 <div class='arn-form-row'>
 <input name='name' placeholder='Your Full Name' required='' type='text'/>
 <input name='company' placeholder='Company Name' type='text'/>
@@ -1088,6 +1041,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </select>
 <textarea name='message' placeholder='Tell us your requirements — quantity, grade, packaging, and destination port...'></textarea>
 <button class='arn-form-btn' type='submit'>Send Inquiry &#8594;</button>
+<div class='arn-form-status' id='arnFormStatus'></div>
 </form>
 </div>
 </section>
@@ -1305,5 +1259,85 @@ html,body{max-width:100%;overflow-x:hidden}
 //]]>
 </script>
 
+<script>
+//<![CDATA[
+(function(){
+  /* Kalau ID Formspree sudah ada, isi di sini - form akan mengirim normal ke sana
+     dan seluruh jalur WhatsApp di bawah dilewati. */
+  var FORMSPREE_ID = '';
+
+  var TUJUAN_WA = '6285732345939';
+  var TUJUAN_EMAIL = 'business@aromaranusantara.com';
+
+  var form = document.getElementById('arnInquiry');
+  if (!form) return;
+  var status = document.getElementById('arnFormStatus');
+
+  if (FORMSPREE_ID) {
+    form.setAttribute('action', 'https://formspree.io/f/' + FORMSPREE_ID);
+    form.removeAttribute('enctype');
+    return;
+  }
+
+  function ambil(nama){
+    var el = form.elements[nama];
+    return el && el.value ? String(el.value).trim() : '';
+  }
+
+  function labelProduk(){
+    var el = form.elements['product'];
+    if (!el || !el.value) return '';
+    return el.options[el.selectedIndex].text;
+  }
+
+  function susunPesan(){
+    var baris = [
+      'New spice inquiry from aromaranusantara.com',
+      '',
+      'Name: ' + ambil('name'),
+      'Company: ' + (ambil('company') || '-'),
+      'Email: ' + ambil('email'),
+      'Country / Port: ' + (ambil('country') || '-'),
+      'Product of interest: ' + (labelProduk() || '-'),
+      '',
+      'Requirements:',
+      ambil('message') || '-'
+    ];
+    return baris.join('\n');
+  }
+
+  function tampilkan(kelas, html){
+    if (!status) return;
+    status.className = 'arn-form-status tampil ' + kelas;
+    status.innerHTML = html;
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (form.checkValidity && !form.checkValidity()) { form.reportValidity(); return; }
+
+    var pesan = susunPesan();
+    var tautanEmail = 'mailto:' + TUJUAN_EMAIL
+      + '?subject=' + encodeURIComponent('Spice inquiry - ' + (ambil('company') || ambil('name')))
+      + '&body=' + encodeURIComponent(pesan);
+
+    var jendela = window.open('https://wa.me/' + TUJUAN_WA + '?text=' + encodeURIComponent(pesan),
+                              '_blank', 'noopener');
+
+    if (jendela) {
+      tampilkan('sukses',
+        'Opening WhatsApp with your inquiry ready to send. '
+        + 'Prefer email? <a href="' + tautanEmail + '">Send it to ' + TUJUAN_EMAIL + '</a> instead.');
+    } else {
+      tampilkan('galat',
+        'Your browser blocked the WhatsApp window. '
+        + '<a href="https://wa.me/' + TUJUAN_WA + '?text=' + encodeURIComponent(pesan)
+        + '" target="_blank" rel="noopener">Open WhatsApp</a> '
+        + 'or <a href="' + tautanEmail + '">send by email</a>.');
+    }
+  });
+})();
+//]]>
+</script>
 </body>
 </html>
