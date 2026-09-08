@@ -150,7 +150,8 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif;line-height:1.2}
 @keyframes scaleIn{from{opacity:0;transform:scale(0.88)}to{opacity:1;transform:scale(1)}}
 @keyframes countUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes goldLine{from{width:0}to{width:36px}}
-.arn-animate{opacity:0}
+.arn-animate{opacity:1}
+html.arn-js .arn-animate:not(.is-visible){opacity:0}
 .arn-animate.is-visible{animation-fill-mode:both;animation-timing-function:cubic-bezier(0.22,1,0.36,1)}
 .anim-fade-up.is-visible{animation-name:fadeUp}
 .anim-fade-left.is-visible{animation-name:fadeLeft}
@@ -494,6 +495,18 @@ section{padding:60px 5%}
 }
 html,body{max-width:100%;overflow-x:hidden}
 </style>
+<script>/*<![CDATA[*/
+/* Gerbang animasi. Kelas arn-js hanya dipasang bila peramban benar-benar sanggup
+   menjalankan reveal-on-scroll. Kalau tidak, CSS di atas membiarkan semua konten
+   terlihat - jadi teks tidak pernah tersangkut opacity:0 bagi perayap mesin
+   pencari, tab tersembunyi, pengguna tanpa JS, atau yang meminta kurangi gerak. */
+(function(){try{
+  if(!('IntersectionObserver' in window)) return;
+  if(document.visibilityState !== 'visible') return;
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.documentElement.className += ' arn-js';
+}catch(e){}})();
+/*]]>*/</script>
 </head>
 <body>
 <nav class='arn-nav' id='arnNav'>
@@ -1165,22 +1178,35 @@ html,body{max-width:100%;overflow-x:hidden}
     if(window.innerWidth > 768){ closeMenu(); }
   });
 
-  /* jaring pengaman: kalau IntersectionObserver tidak pernah menyala
-     (tab tersembunyi, perayap mesin pencari, browser aneh),
-     buka paksa semua elemen supaya konten tidak pernah tersangkut tak terlihat */
-  setTimeout(function(){
-    var sisa = document.querySelectorAll('.arn-animate');
+  /* Jaring pengaman terarah. Membuka elemen yang sudah cukup masuk layar tetapi
+     belum dibuka IntersectionObserver - entah karena callback-nya tertunda, atau
+     karena elemennya lebih tinggi daripada viewport sehingga ambang 12% tidak
+     akan pernah tercapai. Menempel pada gulir, jadi tidak pernah kedaluwarsa
+     seperti timer sekali jalan. Syaratnya sengaja disamakan dengan pengamat
+     supaya titik pemicunya tidak bergeser. Animasi tidak pernah dimatikan. */
+  var antre = false;
+  function bukaYangSudahDiLayar(){
+    antre = false;
+    var vh = window.innerHeight;
+    var sisa = document.querySelectorAll('.arn-animate:not(.is-visible)');
     for (var i = 0; i < sisa.length; i++) {
-      sisa[i].classList.add('is-visible');
-      /* paksa terlihat tanpa bergantung pada animasi CSS - animasi tidak
-         berjalan di tab tersembunyi maupun pada perayap mesin pencari */
-      if (parseFloat(getComputedStyle(sisa[i]).opacity) < 0.05) {
-        sisa[i].style.opacity = '1';
-        sisa[i].style.transform = 'none';
-        sisa[i].style.animation = 'none';
-      }
+      var r = sisa[i].getBoundingClientRect();
+      var tampak = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+      if (tampak <= 0) continue;
+      var rasio = r.height ? tampak / r.height : 0;
+      if (rasio >= 0.12 || tampak >= vh * 0.5) sisa[i].classList.add('is-visible');
     }
-  }, 2000);
+  }
+  function jadwalkan(){
+    if (antre) return;
+    antre = true;
+    /* sengaja setTimeout, bukan requestAnimationFrame: rAF berhenti total di tab
+       tersembunyi, sedangkan jaring ini justru harus tetap bisa jalan di sana */
+    setTimeout(bukaYangSudahDiLayar, 0);
+  }
+  window.addEventListener('scroll', jadwalkan, {passive: true});
+  window.addEventListener('resize', jadwalkan, {passive: true});
+  setTimeout(bukaYangSudahDiLayar, 3000);
 })();
 //]]>
 </script>
