@@ -499,6 +499,8 @@ html,body{max-width:100%;overflow-x:hidden}
 .arn-form-status.sukses{background:rgba(201,148,58,0.14);border:1px solid rgba(201,148,58,0.45);color:#F0E4CC}
 .arn-form-status.galat{background:rgba(180,60,50,0.16);border:1px solid rgba(180,60,50,0.5);color:#F3D6D2}
 .arn-form-status a{color:var(--gold-light);font-weight:600}
+.arn-honey{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.arn-form-btn[disabled]{opacity:.62;cursor:progress}
 </style>
 <script>/*<![CDATA[*/
 /* Gerbang animasi. Kelas arn-js hanya dipasang bila peramban benar-benar sanggup
@@ -1025,7 +1027,11 @@ html,body{max-width:100%;overflow-x:hidden}
         We welcome inquiries from importers, wholesalers, distributors, manufacturers, and industrial buyers worldwide. Response within 24 hours.
       </div>
 </div>
-<form action='mailto:business@aromaranusantara.com' class='arn-form' enctype='text/plain' id='arnInquiry' method='POST'>
+<form action='https://formsubmit.co/business@aromaranusantara.com' class='arn-form' id='arnInquiry' method='POST'>
+<input name='_subject' type='hidden' value='New spice inquiry - aromaranusantara.com'/>
+<input name='_template' type='hidden' value='table'/>
+<input name='_next' type='hidden' value='https://www.aromaranusantara.com/?inquiry=sent'/>
+<input class='arn-honey' name='_honey' tabindex='-1' type='text'/>
 <div class='arn-form-row'>
 <input name='name' placeholder='Your Full Name' required='' type='text'/>
 <input name='company' placeholder='Company Name' type='text'/>
@@ -1262,36 +1268,41 @@ html,body{max-width:100%;overflow-x:hidden}
 <script>
 //<![CDATA[
 (function(){
-  /* Kalau ID Formspree sudah ada, isi di sini - form akan mengirim normal ke sana
-     dan seluruh jalur WhatsApp di bawah dilewati. */
-  var FORMSPREE_ID = '';
+  var EMAIL   = 'business@aromaranusantara.com';
+  var AJAX    = 'https://formsubmit.co/ajax/' + EMAIL;
+  var WA      = '6285732345939';
 
-  var TUJUAN_WA = '6285732345939';
-  var TUJUAN_EMAIL = 'business@aromaranusantara.com';
-
-  var form = document.getElementById('arnInquiry');
+  var form   = document.getElementById('arnInquiry');
   if (!form) return;
   var status = document.getElementById('arnFormStatus');
+  var tombol = form.querySelector('.arn-form-btn');
+  var labelTombol = tombol ? tombol.innerHTML : '';
 
-  if (FORMSPREE_ID) {
-    form.setAttribute('action', 'https://formspree.io/f/' + FORMSPREE_ID);
-    form.removeAttribute('enctype');
-    return;
+  function tampilkan(kelas, html){
+    if (!status) return;
+    status.className = 'arn-form-status tampil ' + kelas;
+    status.innerHTML = html;
+  }
+
+  /* kembali dari jalur tanpa-JS: FormSubmit memulangkan ke ?inquiry=sent */
+  if (/[?&]inquiry=sent\b/.test(location.search)) {
+    tampilkan('sukses', 'Thank you. Your inquiry has been sent to our team and we will reply within 24 hours.');
+    if (history.replaceState) {
+      history.replaceState({}, '', location.pathname + location.hash);
+    }
   }
 
   function ambil(nama){
     var el = form.elements[nama];
     return el && el.value ? String(el.value).trim() : '';
   }
-
   function labelProduk(){
     var el = form.elements['product'];
     if (!el || !el.value) return '';
     return el.options[el.selectedIndex].text;
   }
-
-  function susunPesan(){
-    var baris = [
+  function pesanRingkas(){
+    return [
       'New spice inquiry from aromaranusantara.com',
       '',
       'Name: ' + ambil('name'),
@@ -1302,39 +1313,59 @@ html,body{max-width:100%;overflow-x:hidden}
       '',
       'Requirements:',
       ambil('message') || '-'
-    ];
-    return baris.join('\n');
+    ].join('\n');
   }
-
-  function tampilkan(kelas, html){
-    if (!status) return;
-    status.className = 'arn-form-status tampil ' + kelas;
-    status.innerHTML = html;
+  function jalurCadangan(alasan){
+    var teks = encodeURIComponent(pesanRingkas());
+    tampilkan('galat', alasan
+      + ' You can still reach us directly &#8212; '
+      + '<a href="https://wa.me/' + WA + '?text=' + teks + '" target="_blank" rel="noopener">send this on WhatsApp</a> '
+      + 'or <a href="mailto:' + EMAIL + '?subject='
+      + encodeURIComponent('Spice inquiry - ' + (ambil('company') || ambil('name')))
+      + '&body=' + teks + '">email it to ' + EMAIL + '</a>.');
   }
 
   form.addEventListener('submit', function(e){
+    /* tanpa fetch, biarkan POST biasa ke FormSubmit berjalan apa adanya */
+    if (typeof window.fetch !== 'function') return;
     e.preventDefault();
     if (form.checkValidity && !form.checkValidity()) { form.reportValidity(); return; }
+    if (ambil('_honey')) return;   /* jebakan bot */
 
-    var pesan = susunPesan();
-    var tautanEmail = 'mailto:' + TUJUAN_EMAIL
-      + '?subject=' + encodeURIComponent('Spice inquiry - ' + (ambil('company') || ambil('name')))
-      + '&body=' + encodeURIComponent(pesan);
+    if (tombol) { tombol.disabled = true; tombol.innerHTML = 'Sending&#8230;'; }
+    tampilkan('sukses', 'Sending your inquiry&#8230;');
 
-    var jendela = window.open('https://wa.me/' + TUJUAN_WA + '?text=' + encodeURIComponent(pesan),
-                              '_blank', 'noopener');
+    var muatan = {
+      name:    ambil('name'),
+      company: ambil('company') || '-',
+      email:   ambil('email'),
+      country: ambil('country') || '-',
+      product: labelProduk() || '-',
+      message: ambil('message') || '-',
+      _subject: 'New spice inquiry - ' + (ambil('company') || ambil('name')),
+      _template: 'table',
+      _captcha: 'false'
+    };
 
-    if (jendela) {
-      tampilkan('sukses',
-        'Opening WhatsApp with your inquiry ready to send. '
-        + 'Prefer email? <a href="' + tautanEmail + '">Send it to ' + TUJUAN_EMAIL + '</a> instead.');
-    } else {
-      tampilkan('galat',
-        'Your browser blocked the WhatsApp window. '
-        + '<a href="https://wa.me/' + TUJUAN_WA + '?text=' + encodeURIComponent(pesan)
-        + '" target="_blank" rel="noopener">Open WhatsApp</a> '
-        + 'or <a href="' + tautanEmail + '">send by email</a>.');
-    }
+    fetch(AJAX, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      body: JSON.stringify(muatan)
+    })
+    .then(function(r){ return r.json().catch(function(){ return {}; }); })
+    .then(function(d){
+      if (tombol) { tombol.disabled = false; tombol.innerHTML = labelTombol; }
+      if (d && String(d.success) === 'true') {
+        form.reset();
+        tampilkan('sukses', 'Thank you. Your inquiry has been sent to our team and we will reply within 24 hours.');
+      } else {
+        jalurCadangan('We could not send that automatically.');
+      }
+    })
+    .catch(function(){
+      if (tombol) { tombol.disabled = false; tombol.innerHTML = labelTombol; }
+      jalurCadangan('The connection failed.');
+    });
   });
 })();
 //]]>
