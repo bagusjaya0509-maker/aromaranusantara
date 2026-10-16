@@ -11,6 +11,7 @@ index.html                  halaman utama (satu halaman, navigasi anchor)
 2026/08/*.html              4 artikel — URL dipertahankan persis seperti di Blogger
 2026/09/*.html              3 artikel panduan pembeli
 products/*.html             3 halaman produk untuk cengkeh, pala, kapulaga putih
+p/cloves.html               pengalihan URL cengkeh lama ke halaman produk baru
 assets/css/product-pages.css   gaya halaman produk, mengikuti merek yang ada
 assets/js/product-navigation.js navigasi responsif halaman produk
 assets/img/*.webp           gambar, dioptimasi dari 12,9 MB menjadi 1,0 MB
@@ -22,8 +23,10 @@ CNAME                       domain kustom GitHub Pages
 
 ## Penting
 
-**URL artikel JANGAN diubah.** Keempatnya sudah terindeks Google dengan path `/2026/08/...html`.
-GitHub Pages tidak bisa melakukan 301 redirect, jadi mengubah URL = kehilangan indeks.
+**URL artikel JANGAN diubah.** URL `/2026/08/...html` sudah dikenal Google;
+status indeks masing-masing URL perlu diperiksa di Search Console.
+GitHub Pages tidak menyediakan konfigurasi HTTP 301 per URL, jadi pertahankan
+alamat yang sudah dipublikasikan agar tautan lama tetap dapat digunakan.
 
 ## Cara memperbarui
 
@@ -65,6 +68,11 @@ URL katalog `/p/roduct-catalog.html` sengaja dipertahankan, termasuk ejaannya,
 agar tautan lama tetap berfungsi. Angka spesifikasi pada halaman produk mengikuti
 katalog; jika penawaran berubah, perbarui beranda, katalog, dan halaman produk
 yang terkait secara bersamaan. Halaman baru tidak menambahkan harga atau ulasan.
+
+URL cengkeh lama `/p/cloves.html` memakai `meta refresh` 0 detik, canonical, dan
+tautan biasa ke `/products/indonesian-cloves.html`. Ini pengalihan HTML instan,
+bukan respons HTTP 301. Pertahankan berkas tersebut dan jangan masukkan URL
+pengalihan ke sitemap; hanya halaman tujuan yang dicantumkan.
 
 Setelah perubahan diterbitkan, periksa URL baru di Google Search Console dan
 kirim sitemap `https://www.aromaranusantara.com/sitemap.xml`. Perubahan kode
