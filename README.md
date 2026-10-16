@@ -9,6 +9,10 @@ Dimigrasikan dari Blogger, 1 September 2026.
 ```
 index.html                  halaman utama (satu halaman, navigasi anchor)
 2026/08/*.html              4 artikel — URL dipertahankan persis seperti di Blogger
+2026/09/*.html              3 artikel panduan pembeli
+products/*.html             3 halaman produk untuk cengkeh, pala, kapulaga putih
+assets/css/product-pages.css   gaya halaman produk, mengikuti merek yang ada
+assets/js/product-navigation.js navigasi responsif halaman produk
 assets/img/*.webp           gambar, dioptimasi dari 12,9 MB menjadi 1,0 MB
 assets/img/og-cover.jpg     gambar pratinjau tautan (JPEG, bukan WebP — scraper WhatsApp)
 sitemap.xml robots.txt      SEO
@@ -23,8 +27,51 @@ GitHub Pages tidak bisa melakukan 301 redirect, jadi mengubah URL = kehilangan i
 
 ## Cara memperbarui
 
-Edit berkas, lalu `git push`. GitHub Pages menerbitkan otomatis dalam ~1 menit.
+Edit berkas, simpan commit, lalu `git push` ke cabang kerja.
+
+Perubahan pada cabang kerja belum mengubah situs publik. Gabungkan perubahan ke
+cabang penerbitan GitHub Pages setelah ditinjau; waktu penerbitan mengikuti status
+deployment GitHub.
 
 Pratinjau lokal:
 
     python -m http.server 8901 --directory .
+
+## Mengubah SEO halaman
+
+Situs ini memakai HTML statis, sehingga tidak memerlukan plugin SEO. Edit langsung:
+
+1. `<title>` dan `<meta name="description">` pada bagian `<head>`.
+2. Judul utama `<h1>` serta penjelasan produk yang terlihat oleh pembaca.
+3. `og:title`, `og:description`, `twitter:title`, dan `twitter:description` agar
+   pratinjau tautan sesuai dengan isi halaman.
+4. Tautan antarhalaman; pastikan halaman baru dapat dibuka dari navigasi atau isi.
+5. `sitemap.xml` saat menambah halaman. Perbarui `lastmod` hanya jika isi halaman
+   mengalami perubahan berarti, bukan otomatis setiap penerbitan.
+
+Gunakan satu fokus produk per halaman, dengan variasi kata yang wajar:
+
+| Halaman | Fokus |
+| --- | --- |
+| `/` | Indonesian spice exporter |
+| `/products/indonesian-cloves.html` | Indonesian clove supplier / exporter |
+| `/products/indonesian-nutmeg.html` | Indonesian nutmeg supplier / exporter |
+| `/products/white-java-cardamom.html` | White Java cardamom supplier |
+
+Ini pemetaan topik produk, bukan hasil riset volume pencarian. Tidak ada target
+kepadatan kata kunci. Tag `meta keywords` tidak digunakan Google Search.
+
+URL katalog `/p/roduct-catalog.html` sengaja dipertahankan, termasuk ejaannya,
+agar tautan lama tetap berfungsi. Angka spesifikasi pada halaman produk mengikuti
+katalog; jika penawaran berubah, perbarui beranda, katalog, dan halaman produk
+yang terkait secara bersamaan. Halaman baru tidak menambahkan harga atau ulasan.
+
+Setelah perubahan diterbitkan, periksa URL baru di Google Search Console dan
+kirim sitemap `https://www.aromaranusantara.com/sitemap.xml`. Perubahan kode
+tidak menjamin pengindeksan, posisi, atau kenaikan traffic.
+
+Rujukan:
+- https://developers.google.com/search/docs/fundamentals/seo-starter-guide
+- https://developers.google.com/search/docs/appearance/title-link
+- https://developers.google.com/search/docs/appearance/snippet
+- https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap
