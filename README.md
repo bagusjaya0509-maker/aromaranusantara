@@ -57,15 +57,27 @@ Situs ini memakai HTML statis, sehingga tidak memerlukan plugin SEO. Edit langsu
 
 Gunakan satu fokus produk per halaman, dengan variasi kata yang wajar:
 
-| Halaman | Fokus |
-| --- | --- |
-| `/` | Indonesian spice exporter |
-| `/products/indonesian-cloves.html` | Indonesian clove supplier / exporter |
-| `/products/indonesian-nutmeg.html` | Indonesian nutmeg supplier / exporter |
-| `/products/white-java-cardamom.html` | White Java cardamom supplier |
+| Halaman | Topik utama | Variasi kebutuhan buyer |
+| --- | --- | --- |
+| `/` | Indonesian spices | Indonesian spice supplier / exporter |
+| `/products/indonesian-cloves.html` | Indonesian cloves | Indonesia clove, cloves supplier Indonesia, wholesale cloves |
+| `/products/indonesian-nutmeg.html` | Indonesian nutmeg | Indonesia nutmeg, nutmeg supplier Indonesia, wholesale nutmeg |
+| `/products/white-java-cardamom.html` | Java cardamom | white Java cardamom, white cardamom Indonesia, Java cardamom wholesale |
 
 Ini pemetaan topik produk, bukan hasil riset volume pencarian. Tidak ada target
 kepadatan kata kunci. Tag `meta keywords` tidak digunakan Google Search.
+
+Fokus dua kata tidak berarti judul halaman harus terdiri dari dua kata saja.
+Judul lengkap tetap menjelaskan penawaran pemasok, sementara isi halaman menjawab
+kebutuhan pembeli: spesifikasi, pemesanan grosir, sampel, pengemasan, dan penawaran.
+Bagian wholesale pada setiap produk memberi daftar pemeriksaan yang berbeda
+sesuai produknya. Jangan membuat halaman duplikat untuk setiap variasi kata kunci.
+
+Ukur perkembangan dari kueri produk, halaman tujuan, dan negara di laporan
+Performance Search Console. Status terindeks bukan bukti peringkat untuk suatu
+kueri. Nilai waktu evaluasi sebagai jeda untuk mengumpulkan data, bukan tenggat
+yang menjamin posisi tertentu. Data kueri yang tidak ditampilkan Google juga
+tidak boleh dianggap otomatis nol.
 
 URL katalog `/p/roduct-catalog.html` sengaja dipertahankan, termasuk ejaannya,
 agar tautan lama tetap berfungsi. Angka spesifikasi pada halaman produk mengikuti
