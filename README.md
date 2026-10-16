@@ -16,6 +16,9 @@ assets/css/product-pages.css   gaya halaman produk, mengikuti merek yang ada
 assets/js/product-navigation.js navigasi responsif halaman produk
 assets/img/*.webp           gambar, dioptimasi dari 12,9 MB menjadi 1,0 MB
 assets/img/og-cover.jpg     gambar pratinjau tautan (JPEG, bukan WebP — scraper WhatsApp)
+favicon.png                favicon persegi 96×96 untuk browser dan Google Search
+favicon.ico                ikon browser cadangan dalam ukuran 16, 32, dan 48 piksel
+apple-touch-icon.png       ikon bookmark iOS 180×180
 sitemap.xml robots.txt      SEO
 CNAME                       domain kustom GitHub Pages
 .nojekyll                   matikan pemrosesan Jekyll
@@ -74,6 +77,19 @@ tautan biasa ke `/products/indonesian-cloves.html`. Ini pengalihan HTML instan,
 bukan respons HTTP 301. Pertahankan berkas tersebut dan jangan masukkan URL
 pengalihan ke sitemap; hanya halaman tujuan yang dicantumkan.
 
+## Favicon
+
+Seluruh halaman memakai `/favicon.png` (96×96), `/favicon.ico` (16/32/48), dan
+`/apple-touch-icon.png` (180×180). Aset ini merupakan versi persegi dari lambang
+Aromara, tanpa tulisan kecil agar tetap terbaca sebagai ikon. Logo lengkap pada
+`/assets/img/logo.png` tetap dipakai untuk identitas organisasi dan halaman 404.
+
+Pertahankan URL favicon ini. Jika mengganti gambarnya, gunakan gambar persegi
+dan pastikan berkasnya bisa diakses Googlebot-Image. Setelah perubahan diterbitkan,
+ajukan crawl ulang **halaman utama** di Search Console. Ikon pada hasil Google
+bisa baru diperbarui setelah beberapa hari atau minggu; pemasangan yang benar
+tidak menjamin Google akan menampilkannya.
+
 Setelah perubahan diterbitkan, periksa URL baru di Google Search Console dan
 kirim sitemap `https://www.aromaranusantara.com/sitemap.xml`. Perubahan kode
 tidak menjamin pengindeksan, posisi, atau kenaikan traffic.
@@ -82,4 +98,5 @@ Rujukan:
 - https://developers.google.com/search/docs/fundamentals/seo-starter-guide
 - https://developers.google.com/search/docs/appearance/title-link
 - https://developers.google.com/search/docs/appearance/snippet
+- https://developers.google.com/search/docs/appearance/favicon-in-search
 - https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap
