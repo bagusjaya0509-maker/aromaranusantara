@@ -14,6 +14,7 @@ products/*.html             3 halaman produk untuk cengkeh, pala, kapulaga putih
 p/cloves.html               pengalihan URL cengkeh lama ke halaman produk baru
 assets/css/product-pages.css   gaya halaman produk, mengikuti merek yang ada
 assets/js/product-navigation.js navigasi responsif halaman produk
+assets/js/inquiry-form.js   pilihan produk dan pengiriman formulir penawaran
 assets/img/*.webp           gambar, dioptimasi dari 12,9 MB menjadi 1,0 MB
 assets/img/og-cover.jpg     gambar pratinjau tautan (JPEG, bukan WebP — scraper WhatsApp)
 favicon.png                favicon persegi 96×96 untuk browser dan Google Search
@@ -88,6 +89,24 @@ URL cengkeh lama `/p/cloves.html` memakai `meta refresh` 0 detik, canonical, dan
 tautan biasa ke `/products/indonesian-cloves.html`. Ini pengalihan HTML instan,
 bukan respons HTTP 301. Pertahankan berkas tersebut dan jangan masukkan URL
 pengalihan ke sitemap; hanya halaman tujuan yang dicantumkan.
+
+## Gambar dan permintaan penawaran
+
+Gambar beranda di bawah hero memakai `loading="lazy"`, dimensi asli, dan decoding
+asinkron. Gambar hero beranda dipreload; gambar utama halaman produk serta gambar
+produk pertama di katalog tetap dimuat segera. Pertahankan teks alternatif yang
+menjelaskan foto, tanpa mengulang daftar kata kunci. Metadata `primaryImageOfPage`
+di halaman produk menunjuk foto yang juga terlihat pada halaman tersebut.
+
+Tautan penawaran dari halaman produk memakai `/?product=clove#contact`,
+`/?product=nutmeg#contact`, atau `/?product=cardamom#contact`. Skrip formulir hanya
+menerima nilai produk yang sudah tersedia; parameter URL lain tidak disisipkan
+ke HTML. Canonical beranda tetap URL utama tanpa parameter.
+
+Kolom jumlah pesanan dan pelabuhan tujuan ikut dikirim melalui FormSubmit maupun
+tautan email/WhatsApp cadangan. Tanpa JavaScript, formulir tetap memakai POST
+biasa; pengunjung memilih produk secara manual. Uji pengiriman dengan respons
+tiruan agar pemeriksaan kode tidak mengirim pesan ke alamat bisnis.
 
 ## Favicon
 
